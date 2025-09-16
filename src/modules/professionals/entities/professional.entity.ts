@@ -27,7 +27,7 @@ export class Professional {
     @OneToMany(() => OpeningHours, openingHours => openingHours.professional)
     openingHours: OpeningHours[];
 
-    @OneToOne(() => User, { cascade: true, eager: true })
+    @OneToOne(() => User, { cascade: true, eager: true, onDelete: 'CASCADE' })
     @JoinColumn()
     user: User;
 

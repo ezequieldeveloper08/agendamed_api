@@ -1,7 +1,8 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 import * as bcrypt from 'bcrypt';
 
 @Entity()
+@Unique(['email'])
 export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;

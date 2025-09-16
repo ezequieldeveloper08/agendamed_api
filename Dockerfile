@@ -10,11 +10,8 @@ RUN npm install
 # Copiar o restante do código
 COPY . .
 
-# Compilar o projeto
-RUN npm run build
-
 # Expor porta
-EXPOSE 3000
+EXPOSE 8080
 
-# Rodar o servidor
+# Rodar o servidor em modo desenvolvimento
 CMD ["npm", "run", "start:dev"]

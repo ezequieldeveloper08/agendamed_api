@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { Professional } from './entities/professional.entity';
@@ -32,10 +32,10 @@ export class ProfessionalsService {
   async create(createProfessionalDto: CreateProfessionalDto) {
     const { user, address, openingHours, categories, ...rest } = createProfessionalDto;
 
-    const newUser = this.userRepository.create({
-      ...user,
-      password: await bcrypt.hash(user.password, 10),
-    });
+    const userExist = await this.userRepository.findOne({where: {email: user.email}});
+    if(userExist) throw new InternalServerErrorException(`Usuário com o email ${user.email} já existe`); 
+
+    const newUser = this.userRepository.create(user);
     await this.userRepository.save(newUser);
 
     const newAddress = this.addressRepository.create(address);
