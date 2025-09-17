@@ -7,11 +7,22 @@ import {
   OneToOne,
   JoinColumn,
   ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { Address } from 'src/modules/address/entities/address.entity';
 import { Professional } from 'src/modules/professionals/entities/professional.entity';
-import { LocationCategory } from 'src/modules/location-categories/entities/location-category.entity';
+
+export enum LocationType {
+  hospital = 'Hospital',
+  clinica = 'Clínica',
+  laboratorio = 'Laboratório',
+  consultorio = 'Consultório',
+  prontoSocorro = 'Pronto-Socorro',
+  postoSaude = 'Posto de Saúde',
+  centroDiagnostico = 'Centro de Diagnóstico',
+  unidadeBasicaSaude = 'Unidade Básica de Saúde',
+  policlinica = 'Policlínica',
+  outro = 'Outro',
+}
 
 @Entity()
 export class Location {
@@ -24,6 +35,9 @@ export class Location {
   @Column({ nullable: true })
   description?: string;
 
+  @Column({type: 'simple-array', nullable: true})
+  images: Array<string>;
+
   @OneToOne(() => Address, { cascade: true, eager: true })
   @JoinColumn()
   address: Address;
@@ -31,9 +45,8 @@ export class Location {
   @ManyToMany(() => Professional, (professional) => professional.locations)
   professionals: Professional[];
 
-  @ManyToMany(() => LocationCategory, { cascade: true })
-  @JoinTable()
-  categories: LocationCategory[];
+  @Column({type: 'simple-enum', enum: LocationType, nullable: true})
+  type: LocationType;
 
   @CreateDateColumn()
   createdAt: Date;

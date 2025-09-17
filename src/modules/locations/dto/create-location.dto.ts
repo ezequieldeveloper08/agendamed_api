@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsOptional, IsArray, IsUUID, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsArray, IsUUID, ValidateNested, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateAddressDto } from 'src/modules/address/dto/create-address.dto';
+import { LocationType } from '../entities/location.entity';
 
 export class CreateLocationDto {
   @ApiProperty({ description: 'Nome do estabelecimento', example: 'Clínica Central' })
@@ -14,6 +15,11 @@ export class CreateLocationDto {
   @IsString()
   description?: string;
 
+  @ApiProperty({ description: 'Tipo do estabelecimento', required: false, example: LocationType.clinica })
+  @IsOptional()
+  @IsEnum(LocationType)
+  type?: LocationType;
+
   @ApiProperty({ type: CreateAddressDto, description: 'Endereço do estabelecimento' })
   @ValidateNested()
   @Type(() => CreateAddressDto)
@@ -24,8 +30,4 @@ export class CreateLocationDto {
   @IsArray()
   @IsUUID('4', { each: true })
   professionals?: string[];
-
-  @ApiProperty({ type: [Number], example: [1, 3] })
-  @IsArray()
-  categories: number[];
 }

@@ -25,7 +25,7 @@ export class LocationsService {
   ) {}
 
   async create(createLocationDto: CreateLocationDto) {
-    const { address, professionals, categories, ...rest } = createLocationDto;
+    const { address, professionals, ...rest } = createLocationDto;
 
     // Cria endereço
     const newAddress = this.addressRepository.create(address);
@@ -39,20 +39,11 @@ export class LocationsService {
       });
     }
 
-    // Busca categorias
-    let categoryEntities: LocationCategory[] = [];
-    if (categories?.length) {
-      categoryEntities = await this.categoryRepository.find({
-        where: { id: In(categories) },
-      });
-    }
-
     // Cria Location
     const location = this.locationRepository.create({
       ...rest,
       address: newAddress,
       professionals: professionalEntities,
-      categories: categoryEntities,
     });
 
     await this.locationRepository.save(location);
@@ -66,7 +57,7 @@ export class LocationsService {
 
   async findAll(page = 1, limit = 10) {
     const [locations, total] = await this.locationRepository.findAndCount({
-      relations: ['address', 'professionals', 'categories'],
+      relations: ['address', 'professionals',],
       skip: (page - 1) * limit,
       take: limit,
     });
@@ -82,7 +73,7 @@ export class LocationsService {
   async findOne(id: string) {
     const location = await this.locationRepository.findOne({
       where: { id },
-      relations: ['address', 'professionals', 'categories'],
+      relations: ['address', 'professionals',],
     });
 
     if (!location) {
@@ -102,7 +93,7 @@ export class LocationsService {
   async update(id: string, updateLocationDto: UpdateLocationDto) {
     const location = await this.locationRepository.findOne({
       where: { id },
-      relations: ['address', 'professionals', 'categories'],
+      relations: ['address', 'professionals',],
     });
 
     if (!location) {
@@ -112,7 +103,7 @@ export class LocationsService {
       });
     }
 
-    const { address, professionals, categories, ...rest } = updateLocationDto;
+    const { address, professionals, ...rest } = updateLocationDto;
 
     // Atualiza endereço
     if (address) {
@@ -128,13 +119,6 @@ export class LocationsService {
       location.professionals = professionalEntities;
     }
 
-    // Atualiza categorias
-    if (categories) {
-      const categoryEntities = await this.categoryRepository.find({
-        where: { id: In(categories) },
-      });
-      location.categories = categoryEntities;
-    }
 
     Object.assign(location, rest);
     const updated = await this.locationRepository.save(location);

@@ -15,7 +15,7 @@ import { AuthModule } from './modules/auth/auth.module';
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: process.env.DATABASE_HOST,
       port: +process.env.DATABASE_PORT!,
       username: process.env.DATABASE_USER,
