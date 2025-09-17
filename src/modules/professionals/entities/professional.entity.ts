@@ -9,12 +9,21 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne,
 export class Professional {
     @PrimaryGeneratedColumn('uuid')
     id: string;
-
+    
     @Column()
     name: string;
-
+    
     @Column()
     description: string;
+    
+    @Column({nullable: true})
+    avatar: string;
+    
+    @Column({nullable: true})
+    cellphone: string;
+
+    @Column({nullable: true})
+    document: string;
 
     @ManyToMany(() => ProfessionalCategory)
     @JoinTable()

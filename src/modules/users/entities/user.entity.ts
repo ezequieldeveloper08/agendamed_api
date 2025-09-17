@@ -7,6 +7,15 @@ export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @Column({nullable: true})
+    avatar: string;
+
+    @Column({nullable: true})
+    cellphone: string;
+
+    @Column({nullable: true})
+    document: string;
+
     @Column()
     email: string;
 
