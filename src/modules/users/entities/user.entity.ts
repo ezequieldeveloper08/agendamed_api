@@ -1,5 +1,13 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 import * as bcrypt from 'bcrypt';
+import { Location } from "src/modules/locations/entities/location.entity";
+import { Professional } from "src/modules/professionals/entities/professional.entity";
+
+export enum UserType {
+    patient = 'Paciente',
+    professional = 'Profissional',
+    establishment_owner = 'Dono de Estabelecimento',
+}
 
 @Entity()
 @Unique(['email'])
@@ -7,13 +15,16 @@ export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({nullable: true})
+    @Column({ type: 'simple-enum', enum: UserType, default: UserType.patient })
+    type: UserType;
+
+    @Column({ nullable: true })
     avatar: string;
 
-    @Column({nullable: true})
+    @Column({ nullable: true })
     cellphone: string;
 
-    @Column({nullable: true})
+    @Column({ nullable: true })
     document: string;
 
     @Column()
@@ -24,10 +35,10 @@ export class User {
 
     @Column()
     dateOfBirth: string;
-    
+
     @Column()
     gender: string;
-    
+
     @Column()
     password: string;
 
@@ -36,6 +47,12 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @OneToMany(() => Location, location => location.manager, { eager: true, })
+    localManager: Location[];
+
+    @OneToOne(() => Professional, professional => professional.user)
+    professional: Professional;
 
     @BeforeInsert()
     hashPassword() {

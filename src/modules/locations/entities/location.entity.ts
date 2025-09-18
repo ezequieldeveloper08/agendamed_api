@@ -7,9 +7,11 @@ import {
   OneToOne,
   JoinColumn,
   ManyToMany,
+  ManyToOne,
 } from 'typeorm';
 import { Address } from 'src/modules/address/entities/address.entity';
 import { Professional } from 'src/modules/professionals/entities/professional.entity';
+import { User } from 'src/modules/users/entities/user.entity';
 
 export enum LocationType {
   hospital = 'Hospital',
@@ -53,4 +55,7 @@ export class Location {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => User, user => user.localManager, {onDelete: 'CASCADE'})
+  manager: User;
 }

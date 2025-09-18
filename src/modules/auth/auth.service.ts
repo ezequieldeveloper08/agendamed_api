@@ -10,11 +10,11 @@ export class AuthService {
 
   async signIn(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneByEmail(email);
-    if(!user) throw new UnauthorizedException();
+    if(!user) throw new UnauthorizedException('Email e/ou senha incorreto(s).');
 
     const isValid = compareSync(pass, user.password,);
     if (!isValid) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Email e/ou senha incorreto(s).');
     }
     const {password, ...userData} = user;
     const payload = { sub: user.id, username: user.name };
