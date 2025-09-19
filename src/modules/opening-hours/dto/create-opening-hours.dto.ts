@@ -1,20 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsString } from 'class-validator';
-
-export enum DayOfWeek {
-  SEGUNDA = 'SEGUNDA',
-  TERCA = 'TERCA',
-  QUARTA = 'QUARTA',
-  QUINTA = 'QUINTA',
-  SEXTA = 'SEXTA',
-  SABADO = 'SABADO',
-  DOMINGO = 'DOMINGO',
-}
+import { WeekDay } from '../entities/opening-hours.entity';
 
 export class CreateOpeningHoursDto {
-  @ApiProperty({ enum: DayOfWeek, example: DayOfWeek.SEGUNDA })
-  @IsEnum(DayOfWeek)
-  day: DayOfWeek;
+  @ApiProperty({ enum: WeekDay, example: WeekDay.SEGUNDA })
+  @IsEnum(WeekDay)
+  day: WeekDay;
 
   @ApiProperty({ example: '08:00' })
   @IsString()
