@@ -51,7 +51,7 @@ export class User {
     @OneToMany(() => Location, location => location.manager, { eager: true, })
     localManager: Location[];
 
-    @OneToOne(() => Professional, professional => professional.user)
+    @OneToOne(() => Professional, professional => professional.user,)
     professional: Professional;
 
     @BeforeInsert()
